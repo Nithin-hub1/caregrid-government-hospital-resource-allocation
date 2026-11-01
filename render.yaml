@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: caregrid-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    region: oregon
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: CAREGRID_JWT_SECRET
+        generateValue: true
+      - key: CAREGRID_ADMIN_PASSWORD
+        sync: false
+      - key: CAREGRID_OPERATOR_PASSWORD
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        value: "*"

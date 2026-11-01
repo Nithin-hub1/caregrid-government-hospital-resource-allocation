@@ -87,4 +87,5 @@ backend/startup-error.txt
 *.tmp
 *.bak
 *.dump
+*.sql
 scratch/

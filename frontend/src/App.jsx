@@ -39,7 +39,7 @@ import DoctorManagement from "./DoctorManagement";
 import ReferralManagement from "./ReferralManagement";
 import HospitalsManagement from "./HospitalsManagement";
 import UserManagement from "./UserManagement";
-import { authFetch, getUser, getToken, logoutApi } from "./api";
+import { authFetch, getUser, getToken, logoutApi, buildUrl } from "./api";
 
 import "./App.css";
 
@@ -112,7 +112,7 @@ export default function App() {
 
     try {
       const responses = await Promise.all([
-        fetch(`${API}/health`),
+        fetch(buildUrl(`${API}/health`)),
         authFetch(`${API}/dashboard/summary`),
         authFetch(`${API}/patients`),
       ]);

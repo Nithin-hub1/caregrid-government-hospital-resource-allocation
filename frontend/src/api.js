@@ -1,4 +1,15 @@
-// CareGrid Central API Client with JWT Bearer Authentication
+// CareGrid Central API Client with JWT Bearer Authentication & Configurable Base URL
+
+export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/+$/, "");
+
+export function buildUrl(endpoint) {
+  if (!endpoint) return "";
+  if (endpoint.startsWith("http://") || endpoint.startsWith("https://")) {
+    return endpoint;
+  }
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  return API_BASE_URL ? `${API_BASE_URL}${cleanEndpoint}` : cleanEndpoint;
+}
 
 const TOKEN_KEY = "caregrid_jwt_token";
 const USER_KEY = "caregrid_user_data";
@@ -38,6 +49,7 @@ export function clearAuth() {
 }
 
 export async function authFetch(url, options = {}) {
+  const targetUrl = buildUrl(url);
   const token = getToken();
   const headers = {
     ...(options.headers || {}),
@@ -51,7 +63,7 @@ export async function authFetch(url, options = {}) {
     headers["Content-Type"] = "application/json";
   }
 
-  const response = await fetch(url, {
+  const response = await fetch(targetUrl, {
     ...options,
     headers,
   });
@@ -65,7 +77,7 @@ export async function authFetch(url, options = {}) {
 }
 
 export async function loginApi(usernameOrEmail, password) {
-  const response = await fetch("/api/auth/login", {
+  const response = await fetch(buildUrl("/api/auth/login"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ usernameOrEmail, password }),
